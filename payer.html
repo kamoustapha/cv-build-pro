@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paiement CV Builder PRO</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#667eea,#764ba2);min-height:100vh;padding:40px 20px}
+        .container{max-width:600px;margin:0 auto}
+        .header{text-align:center;color:#fff;margin-bottom:30px}
+        .header h1{font-size:32px;margin-bottom:8px}
+        .header p{font-size:14px;opacity:0.9}
+        .payment-card{background:#fff;border-radius:16px;padding:30px;box-shadow:0 20px 40px rgba(0,0,0,0.3)}
+        .pack-info{text-align:center;margin-bottom:25px;padding-bottom:20px;border-bottom:2px solid #f0f0f0}
+        .pack-info .pack-name{font-size:20px;font-weight:700;color:#333}
+        .pack-info .pack-models{color:#999;font-size:13px;margin:5px 0}
+        .pack-info .pack-price{font-size:42px;font-weight:700;color:#667eea;margin:10px 0}
+        .pack-info .pack-price span{font-size:16px;color:#999}
+        .section-title{font-size:16px;font-weight:700;color:#333;margin-bottom:15px;display:flex;align-items:center;gap:8px}
+        .payment-methods{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:25px}
+        .payment-method{border:2px solid #e0e0e0;border-radius:12px;padding:20px 15px;text-align:center;cursor:pointer;transition:all 0.3s;text-decoration:none;color:inherit}
+        .payment-method:hover{border-color:#667eea;background:#f8f9ff;transform:translateY(-2px);box-shadow:0 5px 15px rgba(102,126,234,0.2)}
+        .payment-method.selected{border-color:#667eea;background:#f0f4ff}
+        .payment-method .pm-icon{font-size:36px;margin-bottom:8px}
+        .payment-method .pm-name{font-weight:600;font-size:14px;margin-bottom:3px}
+        .payment-method .pm-desc{font-size:11px;color:#999}
+        .form-group{margin-bottom:15px;display:none}
+        .form-group.active{display:block}
+        .form-group label{display:block;font-weight:600;font-size:13px;margin-bottom:5px;color:#333}
+        .form-group input,.form-group select{width:100%;padding:10px 12px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;font-family:inherit}
+        .form-group input:focus{border-color:#667eea;outline:none}
+        .btn-pay{display:block;width:100%;background:#667eea;color:#fff;padding:14px;border:none;border-radius:50px;font-size:18px;font-weight:700;cursor:pointer;transition:all 0.3s;margin-top:15px}
+        .btn-pay:hover{background:#4f46e5;transform:scale(1.02)}
+        .secure-info{text-align:center;color:#999;font-size:11px;margin-top:15px}
+        .btn-back{display:block;text-align:center;color:#fff;text-decoration:none;margin-top:20px;font-size:14px;opacity:0.8}
+        .or-divider{text-align:center;color:#999;font-size:13px;margin:15px 0;position:relative}
+        .or-divider::before,.or-divider::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:#e0e0e0}
+        .or-divider::before{left:0}.or-divider::after{right:0}
+        @media(max-width:500px){.payment-methods{grid-template-columns:1fr}}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💳 Paiement sécurisé</h1>
+            <p>Choisissez votre moyen de paiement</p>
+        </div>
+
+        <div class="payment-card">
+            <!-- Infos du pack -->
+            <div class="pack-info">
+                <div class="pack-name" id="packName">🌟 Tous les modèles</div>
+                <div class="pack-models" id="packModels">20 modèles</div>
+                <div class="pack-price" id="packPrice">4.99<span>€</span></div>
+            </div>
+
+            <div class="section-title">🔽 Choisissez votre moyen de paiement</div>
+
+            <!-- Méthodes de paiement -->
+            <div class="payment-methods">
+                <div class="payment-method" onclick="selectPayment('wave')" id="pm-wave">
+                    <div class="pm-icon">📱</div>
+                    <div class="pm-name">Wave</div>
+                    <div class="pm-desc">Sénégal, Côte d'Ivoire</div>
+                </div>
+                <div class="payment-method" onclick="selectPayment('orange')" id="pm-orange">
+                    <div class="pm-icon">🟠</div>
+                    <div class="pm-name">Orange Money</div>
+                    <div class="pm-desc">Afrique francophone</div>
+                </div>
+                <div class="payment-method" onclick="selectPayment('card')" id="pm-card">
+                    <div class="pm-icon">💳</div>
+                    <div class="pm-name">Carte bancaire</div>
+                    <div class="pm-desc">Visa, Mastercard</div>
+                </div>
+                <div class="payment-method" onclick="selectPayment('paypal')" id="pm-paypal">
+                    <div class="pm-icon">🅿️</div>
+                    <div class="pm-name">PayPal</div>
+                    <div class="pm-desc">International</div>
+                </div>
+            </div>
+
+            <!-- Formulaire Wave -->
+            <div class="form-group" id="form-wave">
+                <label>📱 Numéro Wave</label>
+                <input type="tel" placeholder="Ex: +221 77 123 45 67" id="waveNumber">
+                <p style="font-size:11px;color:#999;margin-top:5px">Vous recevrez une notification Wave pour confirmer le paiement</p>
+            </div>
+
+            <!-- Formulaire Orange Money -->
+            <div class="form-group" id="form-orange">
+                <label>🟠 Numéro Orange Money</label>
+                <input type="tel" placeholder="Ex: +221 78 123 45 67" id="orangeNumber">
+                <p style="font-size:11px;color:#999;margin-top:5px">Vous recevrez un code USSD pour confirmer</p>
+            </div>
+
+            <!-- Formulaire Carte -->
+            <div class="form-group" id="form-card">
+                <label>💳 Numéro de carte</label>
+                <input type="text" placeholder="1234 5678 9012 3456" id="cardNumber">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+                    <div><label>Expiration</label><input type="text" placeholder="MM/AA" id="cardExpiry"></div>
+                    <div><label>CVV</label><input type="text" placeholder="123" id="cardCvv"></div>
+                </div>
+            </div>
+
+            <!-- Bouton payer -->
+            <button class="btn-pay" onclick="processPayment()">
+                💰 Payer <span id="btnPrice">4.99€</span>
+            </button>
+            <div class="secure-info">🔒 Paiement sécurisé SSL</div>
+
+            <div class="or-divider">ou</div>
+
+            <!-- Paiement direct via liens -->
+            <div style="text-align:center">
+                <a href="https://paypal.me/VOTRE_PSEUDO/4.99" target="_blank" style="display:inline-block;background:#ffc439;color:#333;padding:12px 30px;border-radius:50px;text-decoration:none;font-weight:700;font-size:14px">🅿️ Payer directement avec PayPal</a>
+            </div>
+        </div>
+
+        <a href="prix.html" class="btn-back">← Retour aux tarifs</a>
+    </div>
+
+    <script>
+        // Récupérer le pack depuis l'URL
+        var urlParams = new URLSearchParams(window.location.search);
+        var pack = urlParams.get('pack') || 'all';
+        
+        var packs = {
+            'minimal': { name: '✨ Pack Minimaliste', models: '5 modèles', price: 0.99, stripeId: 'MINIMAL' },
+            'classic': { name: '🏛️ Pack Classique', models: '5 modèles', price: 1.99, stripeId: 'CLASSIC' },
+            'creative': { name: '🎨 Pack Créatif', models: '5 modèles', price: 1.99, stripeId: 'CREATIVE' },
+            'modern': { name: '🚀 Pack Moderne', models: '5 modèles', price: 2.99, stripeId: 'MODERN' },
+            'all': { name: '🌟 Tous les modèles', models: '20 modèles', price: 4.99, stripeId: 'ALL' }
+        };
+        
+        var currentPack = packs[pack] || packs['all'];
+        document.getElementById('packName').textContent = currentPack.name;
+        document.getElementById('packModels').textContent = currentPack.models;
+        document.getElementById('packPrice').innerHTML = currentPack.price + '<span>€</span>';
+        document.getElementById('btnPrice').textContent = currentPack.price + '€';
+        
+        var selectedMethod = null;
+        
+        function selectPayment(method) {
+            selectedMethod = method;
+            
+            // Mettre à jour les classes
+            document.querySelectorAll('.payment-method').forEach(function(el) {
+                el.classList.remove('selected');
+            });
+            document.getElementById('pm-' + method).classList.add('selected');
+            
+            // Afficher le formulaire correspondant
+            document.querySelectorAll('.form-group').forEach(function(el) {
+                el.classList.remove('active');
+            });
+            var formEl = document.getElementById('form-' + method);
+            if (formEl) formEl.classList.add('active');
+        }
+        
+        function processPayment() {
+            if (!selectedMethod) {
+                alert('Veuillez choisir un moyen de paiement');
+                return;
+            }
+            
+            var phone = '';
+            if (selectedMethod === 'wave') {
+                phone = document.getElementById('waveNumber').value;
+                if (!phone) { alert('Veuillez entrer votre numéro Wave'); return; }
+                // Simuler paiement Wave
+                alert('📱 Paiement Wave de ' + currentPack.price + '€ initié !\n\nVous allez recevoir une notification Wave pour confirmer.\n\nAprès confirmation, votre code premium sera envoyé par SMS au ' + phone);
+            } else if (selectedMethod === 'orange') {
+                phone = document.getElementById('orangeNumber').value;
+                if (!phone) { alert('Veuillez entrer votre numéro Orange Money'); return; }
+                // Simuler paiement Orange Money
+                alert('🟠 Paiement Orange Money de ' + currentPack.price + '€ initié !\n\nVous allez recevoir un code USSD pour confirmer.\n\nAprès confirmation, votre code premium sera envoyé par SMS au ' + phone);
+            } else if (selectedMethod === 'card') {
+                // Rediriger vers Stripe pour Mastercard/Visa
+                var stripeLinks = {
+                    'MINIMAL': 'https://buy.stripe.com/VOTRE_LIEN_MINIMAL',
+                    'CLASSIC': 'https://buy.stripe.com/VOTRE_LIEN_CLASSIC',
+                    'CREATIVE': 'https://buy.stripe.com/VOTRE_LIEN_CREATIF',
+                    'MODERN': 'https://buy.stripe.com/VOTRE_LIEN_MODERNE',
+                    'ALL': 'https://buy.stripe.com/VOTRE_LIEN_TOUT'
+                };
+                window.open(stripeLinks[currentPack.stripeId], '_blank');
+            } else if (selectedMethod === 'paypal') {
+                // Rediriger vers PayPal
+                var paypalLinks = {
+                    'MINIMAL': 'https://paypal.me/VOTRE_PSEUDO/0.99',
+                    'CLASSIC': 'https://paypal.me/VOTRE_PSEUDO/1.99',
+                    'CREATIVE': 'https://paypal.me/VOTRE_PSEUDO/1.99',
+                    'MODERN': 'https://paypal.me/VOTRE_PSEUDO/2.99',
+                    'ALL': 'https://paypal.me/VOTRE_PSEUDO/4.99'
+                };
+                window.open(paypalLinks[currentPack.stripeId], '_blank');
+            }
+            
+            // Après paiement, rediriger vers la page de code
+            setTimeout(function() {
+                window.location.href = 'code.html?pack=' + pack;
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

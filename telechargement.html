@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Téléchargement - CV Builder PRO</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{
+            font-family:'Segoe UI',sans-serif;
+            background:linear-gradient(135deg,#667eea,#764ba2);
+            min-height:100vh;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:20px;
+        }
+        .card{
+            background:#fff;
+            border-radius:16px;
+            padding:40px;
+            text-align:center;
+            max-width:500px;
+            width:100%;
+            box-shadow:0 20px 40px rgba(0,0,0,0.3);
+        }
+        .card .success-icon{font-size:60px;margin-bottom:15px}
+        .card h1{font-size:24px;color:#333;margin-bottom:10px}
+        .card p{color:#666;font-size:14px;margin-bottom:20px}
+        .card .code-box{
+            background:#f0f4ff;
+            border:2px solid #667eea;
+            border-radius:12px;
+            padding:15px;
+            font-size:22px;
+            font-weight:700;
+            color:#667eea;
+            letter-spacing:3px;
+            margin-bottom:15px;
+        }
+        .card input{
+            width:100%;
+            padding:14px;
+            border:2px solid #e0e0e0;
+            border-radius:12px;
+            text-align:center;
+            font-size:16px;
+            font-family:'Courier New',monospace;
+            letter-spacing:3px;
+            text-transform:uppercase;
+            margin-bottom:10px;
+        }
+        .btn{
+            display:block;
+            width:100%;
+            background:#27ae60;
+            color:#fff;
+            padding:14px;
+            border:none;
+            border-radius:25px;
+            font-size:16px;
+            font-weight:700;
+            cursor:pointer;
+            margin-top:10px;
+        }
+        .btn:hover{background:#219a52}
+        .note{
+            font-size:11px;
+            color:#999;
+            margin-top:15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="success-icon">✅</div>
+        <h1>Paiement effectué !</h1>
+        <p>Votre code de téléchargement :</p>
+        <div class="code-box" id="downloadCode">PAID-2024-XXXX</div>
+        <p style="font-size:13px;color:#666;">Entrez ce code ci-dessous pour télécharger votre CV</p>
+        <input type="text" id="codeInput" placeholder="Entrez le code">
+        <button class="btn" onclick="downloadCV()">📥 Télécharger mon CV</button>
+        <p class="note">Le code est valable 24h • Conservez-le</p>
+    </div>
+
+    <script>
+        // Générer un code unique
+        var uniqueCode = 'PAID-' + Date.now().toString(36).toUpperCase();
+        document.getElementById('downloadCode').textContent = uniqueCode;
+        document.getElementById('codeInput').value = uniqueCode;
+        
+        // Stocker le code
+        localStorage.setItem('cvDownloadCode', uniqueCode);
+        localStorage.setItem('cvPaid', 'true');
+        localStorage.setItem('cvPaidDate', new Date().toISOString());
+        
+        function downloadCV() {
+            var code = document.getElementById('codeInput').value.toUpperCase().trim();
+            var storedCode = localStorage.getItem('cvDownloadCode');
+            
+            if (code === storedCode) {
+                // Rediriger vers index.html avec paramètre de téléchargement
+                window.location.href = 'index.html?download=yes&code=' + code;
+            } else {
+                alert('❌ Code invalide. Vérifiez le code affiché.');
+            }
+        }
+    </script>
+</body>
+</html>

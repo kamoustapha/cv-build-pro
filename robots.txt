@@ -1,0 +1,14 @@
+# ============================================
+# robots.txt - CV Builder PRO
+# ============================================
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /private/
+Disallow: /temp/
+
+# Sitemap
+Sitemap: https://cvbuild.github.io/sitemap.xml
+
+# Crawl-delay (optionnel)
+Crawl-delay: 10

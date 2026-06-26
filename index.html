@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- ============================================ -->
+    <!-- 🔍 SEO - BALISES META -->
+    <!-- ============================================ -->
+    <title>CV Builder PRO - Remplissez votre CV professionnel en ligne</title>
+    <meta name="description" content="Créez votre CV professionnel en ligne. Remplissez vos informations et téléchargez votre CV en PDF. 20 modèles disponibles. Paiement unique à partir de 0.99€.">
+    <meta name="keywords" content="CV, curriculum vitae, créer CV, CV en ligne, CV professionnel, modèle CV, CV design, CV moderne, télécharger CV PDF, builder CV">
+    <meta name="author" content="CV Builder PRO">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://cvbuild.github.io/index.html">
+    
+    <!-- Open Graph (Facebook, LinkedIn, WhatsApp) -->
+    <meta property="og:title" content="CV Builder PRO - Remplissez votre CV professionnel">
+    <meta property="og:description" content="Créez et téléchargez votre CV en PDF. 20 modèles professionnels. Remplissage facile et rapide.">
+    <meta property="og:image" content="https://cvbuild.github.io/preview.png">
+    <meta property="og:url" content="https://cvbuild.github.io/index.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="fr_FR">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="CV Builder PRO - Créez votre CV professionnel">
+    <meta name="twitter:description" content="20 modèles de CV. Téléchargement PDF. Paiement unique.">
+    <meta name="twitter:image" content="https://cvbuild.github.io/preview.png">
+    
+    <!-- Données structurées Schema.org -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "CV Builder PRO",
+        "url": "https://cvbuild.github.io",
+        "description": "Créez votre CV professionnel en ligne avec 20 modèles modernes. Téléchargement en PDF.",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "All",
+        "offers": {
+            "@type": "Offer",
+            "price": "0.99",
+            "priceCurrency": "EUR"
+        }
+    }
+    </script>
+    
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Panneau de gauche : Formulaire -->
+        <aside class="side-panel" id="sidePanel">
+            <!-- Barre supérieure -->
+            <div class="top-bar">
+                <h1 class="app-title">📄 CV Builder PRO</h1>
+                <div class="top-actions">
+                    <button class="btn-icon" onclick="toggleDarkMode()" title="Mode sombre/clair" id="darkModeBtn">🌙</button>
+                    <select class="lang-select" id="langSelect" onchange="changeLanguage(this.value)">
+                        <option value="fr">🇫🇷 FR</option>
+                        <option value="en">🇬🇧 EN</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- BARRE DE PRIX DU MODÈLE -->
+            <div id="modelPriceBar" style="background:#fffdf0;border:2px solid #ffd700;border-radius:10px;padding:12px 15px;margin-bottom:15px;text-align:center;display:flex;align-items:center;justify-content:space-between;">
+                <div>
+                    <span id="modelEmoji" style="font-size:24px;">📄</span>
+                    <span id="modelName" style="font-weight:700;font-size:14px;">Modèle</span>
+                </div>
+                <div style="text-align:right;">
+                    <div id="modelPriceTag" style="font-weight:700;color:#667eea;font-size:20px;">0.99€</div>
+                    <div style="font-size:10px;color:#999;">Paiement unique au téléchargement</div>
+                </div>
+            </div>
+
+            <!-- Formulaire principal -->
+            <section class="form-section active">
+                <form id="cvForm" onsubmit="return false;">
+
+                    <!-- Informations personnelles -->
+                    <fieldset class="form-fieldset">
+                        <legend>👤 <span data-lang="info">Informations</span></legend>
+                        <div class="form-group">
+                            <label for="fullName"><span data-lang="name">Nom et Prénom</span> *</label>
+                            <input type="text" id="fullName" placeholder="Jean Dupont" oninput="updatePreview()" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cvTitle"><span data-lang="cvtitle">Titre du CV (poste visé)</span> *</label>
+                            <input type="text" id="cvTitle" placeholder="Stagiaire Logistique" oninput="updatePreview()" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="title"><span data-lang="currentTitle">Titre actuel</span></label>
+                            <input type="text" id="title" placeholder="Développeur Full Stack" oninput="updatePreview()">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" placeholder="jean@email.com" oninput="updatePreview()">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone"><span data-lang="phone">Téléphone</span></label>
+                                <input type="tel" id="phone" placeholder="+33 6 12 34 56 78" oninput="updatePreview()">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="location"><span data-lang="city">Ville</span></label>
+                                <input type="text" id="location" placeholder="Paris" oninput="updatePreview()">
+                            </div>
+                            <div class="form-group">
+                                <label for="linkedin">LinkedIn</label>
+                                <input type="text" id="linkedin" placeholder="linkedin.com/in/..." oninput="updatePreview()">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="summary"><span data-lang="summary">Profil Professionnel</span></label>
+                            <textarea id="summary" placeholder="Décrivez votre profil en 3-4 lignes..." oninput="updatePreview()" rows="3"></textarea>
+                            <button type="button" class="btn-ai" onclick="aiSuggest()" title="Améliorer avec l'IA">🤖 <span data-lang="aiSuggest">Améliorer avec l'IA</span></button>
+                        </div>
+                    </fieldset>
+
+                    <!-- Expériences professionnelles -->
+                    <fieldset class="form-fieldset">
+                        <legend>💼 <span data-lang="experience">Expérience</span></legend>
+                        <div id="experiencesContainer"></div>
+                        <button type="button" class="btn btn-add" onclick="addExperience()">+ <span data-lang="addExp">Ajouter une expérience</span></button>
+                    </fieldset>
+
+                    <!-- Formation -->
+                    <fieldset class="form-fieldset">
+                        <legend>🎓 <span data-lang="education">Formation</span></legend>
+                        <div id="educationContainer"></div>
+                        <button type="button" class="btn btn-add" onclick="addEducation()">+ <span data-lang="addEdu">Ajouter une formation</span></button>
+                    </fieldset>
+
+                    <!-- Hard Skills -->
+                    <fieldset class="form-fieldset">
+                        <legend>🔧 Hard Skills</legend>
+                        <div class="form-group">
+                            <textarea id="hardSkills" placeholder="Excel, ERP, Analyse de données, Gestion de projet..." oninput="updatePreview()" rows="2"></textarea>
+                        </div>
+                    </fieldset>
+
+                    <!-- Soft Skills -->
+                    <fieldset class="form-fieldset">
+                        <legend>🧠 Soft Skills</legend>
+                        <div class="form-group">
+                            <textarea id="softSkills" placeholder="Rigueur, Adaptabilité, Leadership, Communication..." oninput="updatePreview()" rows="2"></textarea>
+                        </div>
+                    </fieldset>
+
+                    <!-- Langues -->
+                    <fieldset class="form-fieldset">
+                        <legend>🌍 <span data-lang="languages">Langues</span></legend>
+                        <div id="languagesContainer"></div>
+                        <button type="button" class="btn btn-add" onclick="addLanguage()">+ <span data-lang="addLang">Ajouter une langue</span></button>
+                    </fieldset>
+
+                    <!-- Centres d'intérêt -->
+                    <fieldset class="form-fieldset">
+                        <legend>🎯 <span data-lang="interests">Centres d'intérêt</span></legend>
+                        <div class="form-group">
+                            <textarea id="interests" placeholder="Actualité économique, Innovation technologique..." oninput="updatePreview()" rows="2"></textarea>
+                        </div>
+                    </fieldset>
+                </form>
+
+                <!-- Boutons d'action -->
+                <div class="button-group">
+                    <button class="btn btn-secondary" onclick="window.location.href='models.html'">← <span data-lang="changeModel">Changer de modèle</span></button>
+                    <button class="btn btn-primary" id="btnDownload" onclick="downloadPDF()">📥 <span data-lang="downloadPDF">Télécharger PDF</span> (<span id="btnPrice">0.99€</span>)</button>
+                </div>
+            </section>
+        </aside>
+
+        <!-- Panneau de droite : Prévisualisation -->
+        <main class="preview-panel">
+            <div class="preview-container" id="previewContainer">
+                <iframe id="previewFrame" class="preview-iframe" sandbox="allow-same-origin allow-scripts" title="Prévisualisation de votre CV professionnel"></iframe>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL DE PAIEMENT DIRECT -->
+    <div id="paymentModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:99999;align-items:center;justify-content:center;">
+        <div style="background:#fff;border-radius:16px;padding:30px;max-width:420px;width:90%;text-align:center;position:relative;">
+            
+            <button onclick="closePaymentModal()" style="position:absolute;top:10px;right:15px;background:none;border:none;font-size:24px;cursor:pointer;color:#999;" aria-label="Fermer">×</button>
+            
+            <div id="modalEmoji" style="font-size:50px;margin-bottom:5px;">📄</div>
+            <h2 style="font-size:18px;margin-bottom:3px;" id="modalModelName">Modèle</h2>
+            
+            <div style="font-size:42px;font-weight:700;color:#667eea;margin:15px 0;" id="modalPrice">0.99€</div>
+            <p style="color:#666;font-size:13px;margin-bottom:5px;">Paiement unique - Téléchargement immédiat</p>
+            <p style="color:#999;font-size:11px;margin-bottom:20px;">Ce modèle uniquement • Accès à vie</p>
+            
+            <p style="font-size:13px;font-weight:600;margin-bottom:10px;">💰 Choisissez votre moyen de paiement</p>
+            
+            <a id="linkPayPal" href="https://paypal.me/cvbuild/0.99" target="_blank" rel="noopener" style="display:block;background:#ffc439;color:#333;padding:14px;border-radius:25px;text-decoration:none;font-weight:700;font-size:15px;margin-bottom:10px;text-align:center;">🅿️ Payer avec PayPal</a>
+            
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:15px;">
+                <div style="flex:1;height:1px;background:#e0e0e0;"></div>
+                <span style="color:#999;font-size:12px;">ou</span>
+                <div style="flex:1;height:1px;background:#e0e0e0;"></div>
+            </div>
+            
+            <p style="font-size:12px;color:#999;margin-bottom:8px;">Vous avez déjà un code premium ?</p>
+            <input type="text" id="premiumCodeInput" placeholder="Entrez votre code ici" aria-label="Code premium" style="width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:8px;text-align:center;font-size:14px;margin-bottom:10px;font-family:'Courier New',monospace;letter-spacing:2px;text-transform:uppercase;">
+            <button onclick="activateAndDownload()" style="width:100%;background:#27ae60;color:#fff;padding:12px;border:none;border-radius:25px;font-size:15px;font-weight:700;cursor:pointer;">✅ Activer & Télécharger</button>
+            
+            <p style="font-size:10px;color:#999;margin-top:10px;">🔒 Paiement sécurisé • Fichier PDF téléchargé directement</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="templates.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
